@@ -22,6 +22,17 @@ Rickshaw.Graph.Legend = function(args) {
 	this.lines = [];
 
 	this.addLine = function (series) {
+		// HACK - We wanted to have the aggregate along with the data.
+		// TODO - WE NEED TO MOVE OUT OF RICKSHAW
+        var data    = series.data;
+		var dataLen = data.length;
+		var sum     = 0;
+		for (i=0 ; i < dataLen ; i++) {
+			if (typeof data[i].y != "undefined") {
+				sum += series.data[i].y;
+			}
+		}
+
 		var line = document.createElement('li');
 		line.className = 'line';
 		if (series.disabled) {
@@ -33,6 +44,9 @@ Rickshaw.Graph.Legend = function(args) {
 		swatch.style.backgroundColor = series.color;
 
 		line.appendChild(swatch);
+
+		// TODO - HACK ADDED SUM
+		label.innerHTML = sum + '<br>' + series.name;
 
 		var label = document.createElement('span');
 		label.className = 'label';
